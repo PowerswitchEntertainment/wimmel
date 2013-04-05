@@ -1,0 +1,146 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>wimmel Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="wimmel">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Dart Documentation</a>
+         &rsaquo; <a href="wimmel.html">wimmel</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="metadata.html">metadata</a></h2><h2><div class="icon-library"></div><strong>wimmel</strong></h2><ul class="icon">
+<li><a href="wimmel/Camera.html"><div class="icon-class"></div>Camera</a></li>
+<li><a href="wimmel/Car.html"><div class="icon-class"></div>Car</a></li>
+<li><a href="wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
+<li><a href="wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
+<li><a href="wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
+<li><a href="wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
+</ul>
+</div>
+<div class="content">
+<h2><strong>wimmel</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="into4">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>into4</strong>(i) <a class="anchor-link" href="#into4"
+              title="Permalink to into4">#</a></h4>
+<div class="doc">
+<p>printf("%04d");</p>
+<pre class="source">
+String into4(var i) {
+ if (i &lt; 10)
+   return "000$i";
+ if (i &lt; 100)
+   return "00$i";
+ if (i &lt; 1000)
+   return "0$i";
+ return i;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="main">
+<button class="show-code">Code</button>
+void <strong>main</strong>() <a class="anchor-link" href="#main"
+              title="Permalink to main">#</a></h4>
+<div class="doc">
+<p>Main-Function</p>
+<p>load all game ressources and prepare to launch game </p>
+<pre class="source">
+void main() {
+ var manager = new ResourceManager();
+ var tiles = [];                      
+ var ressources = new Map();          
+ 
+ /* Load tiles */
+ for (var a = 1; a &lt; 193; a++) {
+   tiles.add(new Tile(manager, "back", into4(a))); 
+ }
+ ressources["images"] = tiles;
+ 
+ /* Load JSON */
+ ressources["map"] = new Json(manager, "map.json");
+ ressources["transitions"] = new Json(manager, "transitions.json");
+ 
+ /* init game */
+ var game = new Game(ressources);
+ 
+ /* start game when all resources are loaded */
+ manager.registerNotifyFunction(game.begin);
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="wimmel/Camera.html"><strong>Camera</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="wimmel/Car.html"><strong>Car</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="wimmel/Game.html"><strong>Game</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="wimmel/Json.html"><strong>Json</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="wimmel/Maus.html"><strong>Maus</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="wimmel/ResourceManager.html"><strong>ResourceManager</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="wimmel/Tile.html"><strong>Tile</strong></a>
+          </h4>
+          </div>
+          
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-06 00:43:47.671</div>
+        </div>
+        <script async src="client-static.js"></script>
+        </body></html>
+        

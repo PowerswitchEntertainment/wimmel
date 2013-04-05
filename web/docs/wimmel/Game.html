@@ -1,0 +1,638 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Game class / wimmel Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wimmel" data-type="Game">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wimmel.html">wimmel</a> &rsaquo; <a href="../wimmel/Game.html">Game</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../metadata.html">metadata</a></h2><h2><div class="icon-library"></div><a href="../wimmel.html">wimmel</a></h2><ul class="icon">
+<li><a href="../wimmel/Camera.html"><div class="icon-class"></div>Camera</a></li>
+<li><a href="../wimmel/Car.html"><div class="icon-class"></div>Car</a></li>
+<li><div class="icon-class"></div><strong>Game</strong></li>
+<li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
+<li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
+<li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>Game</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Game main class
+contains the render loop</p>
+<pre class="source">
+class Game {
+ var canvas;
+ CanvasRenderingContext2D context; // render context
+ var pause = true; // pause the game
+ var delta = 100; // speed variable for frame rate independent programming
+ var start = 0; // timestamp of the last frame
+ var images; // background image list
+ var maus; // mouse instance
+ var camera; // camera instance
+ var map; // 
+ var ressources;
+ var shiftdown = false;
+ var testcar;
+ 
+ /* consts */
+ const MAPWIDTH = 16;
+ const MAPHEIGHT = 12;
+ const SCREENWIDTH = 4000;
+ const SCREENHEIGHT = 3000;
+
+ /**
+  * Constructor
+  * @param resources loaded game resources
+  */
+ Game(resources) {
+   /* get the html canvas */
+   canvas = query("#screen");
+   context = canvas.getContext('2d');
+   // extract images from resources
+   images = ressources["images"];
+   this.ressources = ressources;
+   
+   maus = new Maus(); // new mouse instance
+   camera = new Camera(SCREENWIDTH, SCREENHEIGHT); // new camera instance
+   testcar = new Car(); // new car instance TODO: remove it
+   
+   /* window listener */
+   window.onResize.listen((ev) {resize();});
+   window.onMouseDown.listen(mouseDown);
+   window.onMouseUp.listen(mouseUp);
+   window.onMouseMove.listen(mouseMove);
+   window.onKeyDown.listen((ev) {
+     /* map editor hack */
+     if (ev.keyCode == 17)
+       shiftdown = true;
+     if (ev.keyCode == 65)
+     {
+       print("      { \"id\": \"test2\",");
+       print("        \"coords\": [");
+       map["segments"].add(new Map()); 
+       map["segments"][map["segments"].length-1]["coords"] = new List();
+     }
+   });
+   window.onKeyUp.listen((ev) {shiftdown = false;});
+
+   /* initial canvas resize */
+   resize();
+ }
+ 
+ /**
+  * mouse down handler
+  */
+ void mouseDown(ev) {
+   /* save coords for future movements */
+   maus.pressed = true;
+   maus.x = ev.clientX;
+   maus.y = ev.clientY;
+   camera.move(0,0); // stop camera motion
+   
+   /* Map editor hack */
+   if (shiftdown == true)
+   {
+     print("{\"x\": ${maus.x+camera.x}, \"y\": ${maus.y+camera.y}},");
+     map["segments"][map["segments"].length-1]["coords"].add(new Map());
+     map["segments"][map["segments"].length-1]["coords"][map["segments"][map["segments"].length-1]["coords"].length-1]["x"] = (maus.x+camera.x);
+     map["segments"][map["segments"].length-1]["coords"][map["segments"][map["segments"].length-1]["coords"].length-1]["y"] = (maus.y+camera.y);
+   }
+ }
+ 
+ /**
+  *  mouse button release handler
+  */
+ void mouseUp(ev) {
+   maus.pressed = false;
+ }
+ 
+ /**
+  * mouse movement handler
+  */
+ void mouseMove(ev) {
+   /* camera movement */
+   if (maus.pressed == true &amp;&amp; shiftdown == false) {
+     var dx = maus.x - ev.clientX;
+     var dy = maus.y - ev.clientY;
+     camera.move(dx, dy);
+     maus.x = ev.clientX;
+     maus.y = ev.clientY;
+   }
+ }
+ 
+ /** game start */
+ void begin() {
+   map = ressources["map"].data;
+   pause = false;
+   request();
+ }
+
+ /** resize layout */
+ void resize() {
+   var can = query("#screen");
+   can.height = can.offsetHeight;
+   can.width = can.offsetWidth;
+   //request(); // don't do this!
+ }
+ 
+ /** request new animation frame */
+ void request() {
+   window.requestAnimationFrame(loop);
+ }
+ 
+ /** MAIN LOOP */
+ void loop(time) {
+  
+   // calculate game speed
+   if (start == 0) start = time - 200;
+   delta = time - start;
+   start = time;
+   
+   // update camera
+   camera.update(delta);
+   
+   // draw screen
+   for (var y = 0; y &lt; MAPHEIGHT; y++) {
+     for (var x = 0; x &lt; MAPWIDTH; x++) {
+       if (images[x+y*16].error == false) {
+         context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+       }
+     }
+   }
+   
+   /* RENDER */
+   context.shadowOffsetX = 0;
+   context.shadowOffsetY = 0;
+   context.strokeStyle = "yellow";
+   context.lineWidth = 4;
+   
+   for (var a in map["segments"])
+   {
+     context.beginPath();
+     context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
+     for (var b in a["coords"])
+     {
+       //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
+       context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+     }
+     context.shadowBlur = 2;
+     
+     if (testcar.segment == a["id"])
+       context.strokeStyle = "red";
+     else
+       context.strokeStyle = "yellow";
+     context.stroke();
+     context.shadowBlur = 0;
+     context.fillText(a["id"], a["coords"][(a["coords"].length/2).round()]["x"]-camera.x, a["coords"][(a["coords"].length/2).round()]["y"]-camera.y);
+   }
+   // print(map["segments"][0]["coords"][0]["x"]);
+
+   
+   // request new Frame
+   new Timer(new Duration(milliseconds: 50), request);    
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Game">
+<button class="show-code">Code</button>
+new <strong>Game</strong>(resources) <a class="anchor-link" href="#Game"
+              title="Permalink to Game.Game">#</a></h4>
+<div class="doc">
+<p>Constructor
+@param resources loaded game resources</p>
+<pre class="source">
+Game(resources) {
+ /* get the html canvas */
+ canvas = query("#screen");
+ context = canvas.getContext('2d');
+ // extract images from resources
+ images = ressources["images"];
+ this.ressources = ressources;
+ 
+ maus = new Maus(); // new mouse instance
+ camera = new Camera(SCREENWIDTH, SCREENHEIGHT); // new camera instance
+ testcar = new Car(); // new car instance TODO: remove it
+ 
+ /* window listener */
+ window.onResize.listen((ev) {resize();});
+ window.onMouseDown.listen(mouseDown);
+ window.onMouseUp.listen(mouseUp);
+ window.onMouseMove.listen(mouseMove);
+ window.onKeyDown.listen((ev) {
+   /* map editor hack */
+   if (ev.keyCode == 17)
+     shiftdown = true;
+   if (ev.keyCode == 65)
+   {
+     print("      { \"id\": \"test2\",");
+     print("        \"coords\": [");
+     map["segments"].add(new Map()); 
+     map["segments"][map["segments"].length-1]["coords"] = new List();
+   }
+ });
+ window.onKeyUp.listen((ev) {shiftdown = false;});
+
+ /* initial canvas resize */
+ resize();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="camera">
+<button class="show-code">Code</button>
+var         <strong>camera</strong> <a class="anchor-link"
+            href="#camera"
+            title="Permalink to Game.camera">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+camera
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="canvas">
+<button class="show-code">Code</button>
+var         <strong>canvas</strong> <a class="anchor-link"
+            href="#canvas"
+            title="Permalink to Game.canvas">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+canvas
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="context">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_html/CanvasRenderingContext2D.html">CanvasRenderingContext2D</a>         <strong>context</strong> <a class="anchor-link"
+            href="#context"
+            title="Permalink to Game.context">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+context
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="delta">
+<button class="show-code">Code</button>
+var         <strong>delta</strong> <a class="anchor-link"
+            href="#delta"
+            title="Permalink to Game.delta">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+delta = 100
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="images">
+<button class="show-code">Code</button>
+var         <strong>images</strong> <a class="anchor-link"
+            href="#images"
+            title="Permalink to Game.images">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+images
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="map">
+<button class="show-code">Code</button>
+var         <strong>map</strong> <a class="anchor-link"
+            href="#map"
+            title="Permalink to Game.map">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+map
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MAPHEIGHT">
+<button class="show-code">Code</button>
+const         <strong>MAPHEIGHT</strong> <a class="anchor-link"
+            href="#MAPHEIGHT"
+            title="Permalink to Game.MAPHEIGHT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+MAPHEIGHT = 12
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MAPWIDTH">
+<button class="show-code">Code</button>
+const         <strong>MAPWIDTH</strong> <a class="anchor-link"
+            href="#MAPWIDTH"
+            title="Permalink to Game.MAPWIDTH">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+MAPWIDTH = 16
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="maus">
+<button class="show-code">Code</button>
+var         <strong>maus</strong> <a class="anchor-link"
+            href="#maus"
+            title="Permalink to Game.maus">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+maus
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="pause">
+<button class="show-code">Code</button>
+var         <strong>pause</strong> <a class="anchor-link"
+            href="#pause"
+            title="Permalink to Game.pause">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+pause = true
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="ressources">
+<button class="show-code">Code</button>
+var         <strong>ressources</strong> <a class="anchor-link"
+            href="#ressources"
+            title="Permalink to Game.ressources">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+ressources
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="SCREENHEIGHT">
+<button class="show-code">Code</button>
+const         <strong>SCREENHEIGHT</strong> <a class="anchor-link"
+            href="#SCREENHEIGHT"
+            title="Permalink to Game.SCREENHEIGHT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+SCREENHEIGHT = 3000
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="SCREENWIDTH">
+<button class="show-code">Code</button>
+const         <strong>SCREENWIDTH</strong> <a class="anchor-link"
+            href="#SCREENWIDTH"
+            title="Permalink to Game.SCREENWIDTH">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+SCREENWIDTH = 4000
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="shiftdown">
+<button class="show-code">Code</button>
+var         <strong>shiftdown</strong> <a class="anchor-link"
+            href="#shiftdown"
+            title="Permalink to Game.shiftdown">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+shiftdown = false
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="start">
+<button class="show-code">Code</button>
+var         <strong>start</strong> <a class="anchor-link"
+            href="#start"
+            title="Permalink to Game.start">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+start = 0
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="testcar">
+<button class="show-code">Code</button>
+var         <strong>testcar</strong> <a class="anchor-link"
+            href="#testcar"
+            title="Permalink to Game.testcar">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+testcar
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="begin">
+<button class="show-code">Code</button>
+void <strong>begin</strong>() <a class="anchor-link" href="#begin"
+              title="Permalink to Game.begin">#</a></h4>
+<div class="doc">
+<p>game start </p>
+<pre class="source">
+void begin() {
+ map = ressources["map"].data;
+ pause = false;
+ request();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="loop">
+<button class="show-code">Code</button>
+void <strong>loop</strong>(time) <a class="anchor-link" href="#loop"
+              title="Permalink to Game.loop">#</a></h4>
+<div class="doc">
+<p>MAIN LOOP </p>
+<pre class="source">
+void loop(time) {
+
+ // calculate game speed
+ if (start == 0) start = time - 200;
+ delta = time - start;
+ start = time;
+ 
+ // update camera
+ camera.update(delta);
+ 
+ // draw screen
+ for (var y = 0; y &lt; MAPHEIGHT; y++) {
+   for (var x = 0; x &lt; MAPWIDTH; x++) {
+     if (images[x+y*16].error == false) {
+       context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+     }
+   }
+ }
+ 
+ /* RENDER */
+ context.shadowOffsetX = 0;
+ context.shadowOffsetY = 0;
+ context.strokeStyle = "yellow";
+ context.lineWidth = 4;
+ 
+ for (var a in map["segments"])
+ {
+   context.beginPath();
+   context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
+   for (var b in a["coords"])
+   {
+     //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
+     context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+   }
+   context.shadowBlur = 2;
+   
+   if (testcar.segment == a["id"])
+     context.strokeStyle = "red";
+   else
+     context.strokeStyle = "yellow";
+   context.stroke();
+   context.shadowBlur = 0;
+   context.fillText(a["id"], a["coords"][(a["coords"].length/2).round()]["x"]-camera.x, a["coords"][(a["coords"].length/2).round()]["y"]-camera.y);
+ }
+ // print(map["segments"][0]["coords"][0]["x"]);
+
+ 
+ // request new Frame
+ new Timer(new Duration(milliseconds: 50), request);    
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="mouseDown">
+<button class="show-code">Code</button>
+void <strong>mouseDown</strong>(ev) <a class="anchor-link" href="#mouseDown"
+              title="Permalink to Game.mouseDown">#</a></h4>
+<div class="doc">
+<p>mouse down handler</p>
+<pre class="source">
+void mouseDown(ev) {
+ /* save coords for future movements */
+ maus.pressed = true;
+ maus.x = ev.clientX;
+ maus.y = ev.clientY;
+ camera.move(0,0); // stop camera motion
+ 
+ /* Map editor hack */
+ if (shiftdown == true)
+ {
+   print("{\"x\": ${maus.x+camera.x}, \"y\": ${maus.y+camera.y}},");
+   map["segments"][map["segments"].length-1]["coords"].add(new Map());
+   map["segments"][map["segments"].length-1]["coords"][map["segments"][map["segments"].length-1]["coords"].length-1]["x"] = (maus.x+camera.x);
+   map["segments"][map["segments"].length-1]["coords"][map["segments"][map["segments"].length-1]["coords"].length-1]["y"] = (maus.y+camera.y);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="mouseMove">
+<button class="show-code">Code</button>
+void <strong>mouseMove</strong>(ev) <a class="anchor-link" href="#mouseMove"
+              title="Permalink to Game.mouseMove">#</a></h4>
+<div class="doc">
+<p>mouse movement handler</p>
+<pre class="source">
+void mouseMove(ev) {
+ /* camera movement */
+ if (maus.pressed == true &amp;&amp; shiftdown == false) {
+   var dx = maus.x - ev.clientX;
+   var dy = maus.y - ev.clientY;
+   camera.move(dx, dy);
+   maus.x = ev.clientX;
+   maus.y = ev.clientY;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="mouseUp">
+<button class="show-code">Code</button>
+void <strong>mouseUp</strong>(ev) <a class="anchor-link" href="#mouseUp"
+              title="Permalink to Game.mouseUp">#</a></h4>
+<div class="doc">
+<p> mouse button release handler</p>
+<pre class="source">
+void mouseUp(ev) {
+ maus.pressed = false;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="request">
+<button class="show-code">Code</button>
+void <strong>request</strong>() <a class="anchor-link" href="#request"
+              title="Permalink to Game.request">#</a></h4>
+<div class="doc">
+<p>request new animation frame </p>
+<pre class="source">
+void request() {
+ window.requestAnimationFrame(loop);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="resize">
+<button class="show-code">Code</button>
+void <strong>resize</strong>() <a class="anchor-link" href="#resize"
+              title="Permalink to Game.resize">#</a></h4>
+<div class="doc">
+<p>resize layout </p>
+<pre class="source">
+void resize() {
+ var can = query("#screen");
+ can.height = can.offsetHeight;
+ can.width = can.offsetWidth;
+ //request(); // don't do this!
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-06 00:43:47.728</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        

@@ -1,0 +1,247 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Camera class / wimmel Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wimmel" data-type="Camera">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wimmel.html">wimmel</a> &rsaquo; <a href="../wimmel/Camera.html">Camera</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../metadata.html">metadata</a></h2><h2><div class="icon-library"></div><a href="../wimmel.html">wimmel</a></h2><ul class="icon">
+<li><div class="icon-class"></div><strong>Camera</strong></li>
+<li><a href="../wimmel/Car.html"><div class="icon-class"></div>Car</a></li>
+<li><a href="../wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
+<li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
+<li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
+<li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>Camera</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Camera {
+ var x = 0, y = 0;
+ var width, height;
+ var ax = 0, ay = 0;
+ 
+ Camera(width, height) {
+   this.width = width;
+   this.height = height;
+ }
+ 
+ void update(delta) {
+   if (ax.abs() &gt; 1) {
+     ax *= 0.8;
+   } else {
+     ax = 0;
+   }
+   if (ay.abs() &gt; 1) {
+     ay *= 0.8;
+   } else {
+     ay = 0;
+   }
+   x += ax * delta / 100;
+   y += ay * delta / 100;
+   borders();
+ }
+ 
+ void move(dx, dy) {
+   x += dx;
+   y += dy;
+   
+   ax = dx;
+   ay = dy;
+   borders();
+ }
+ 
+ void borders() {
+   if (x &lt; 0) x = 0;
+   if (y &lt; 0) y = 0;
+   if (x &gt; width - window.innerWidth) x = width - window.innerWidth;
+   if (y &gt; height - window.innerHeight) y = width - window.innerHeight;
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Camera">
+<button class="show-code">Code</button>
+new <strong>Camera</strong>(width, height) <a class="anchor-link" href="#Camera"
+              title="Permalink to Camera.Camera">#</a></h4>
+<div class="doc">
+<pre class="source">
+Camera(width, height) {
+ this.width = width;
+ this.height = height;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="ax">
+<button class="show-code">Code</button>
+var         <strong>ax</strong> <a class="anchor-link"
+            href="#ax"
+            title="Permalink to Camera.ax">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+ax = 0
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="ay">
+<button class="show-code">Code</button>
+var         <strong>ay</strong> <a class="anchor-link"
+            href="#ay"
+            title="Permalink to Camera.ay">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+ay = 0
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="height">
+<button class="show-code">Code</button>
+var         <strong>height</strong> <a class="anchor-link"
+            href="#height"
+            title="Permalink to Camera.height">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+height
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="width">
+<button class="show-code">Code</button>
+var         <strong>width</strong> <a class="anchor-link"
+            href="#width"
+            title="Permalink to Camera.width">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+width
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="x">
+<button class="show-code">Code</button>
+var         <strong>x</strong> <a class="anchor-link"
+            href="#x"
+            title="Permalink to Camera.x">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+x = 0
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="y">
+<button class="show-code">Code</button>
+var         <strong>y</strong> <a class="anchor-link"
+            href="#y"
+            title="Permalink to Camera.y">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+y = 0
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="borders">
+<button class="show-code">Code</button>
+void <strong>borders</strong>() <a class="anchor-link" href="#borders"
+              title="Permalink to Camera.borders">#</a></h4>
+<div class="doc">
+<pre class="source">
+void borders() {
+ if (x &lt; 0) x = 0;
+ if (y &lt; 0) y = 0;
+ if (x &gt; width - window.innerWidth) x = width - window.innerWidth;
+ if (y &gt; height - window.innerHeight) y = width - window.innerHeight;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="move">
+<button class="show-code">Code</button>
+void <strong>move</strong>(dx, dy) <a class="anchor-link" href="#move"
+              title="Permalink to Camera.move">#</a></h4>
+<div class="doc">
+<pre class="source">
+void move(dx, dy) {
+ x += dx;
+ y += dy;
+ 
+ ax = dx;
+ ay = dy;
+ borders();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="update">
+<button class="show-code">Code</button>
+void <strong>update</strong>(delta) <a class="anchor-link" href="#update"
+              title="Permalink to Camera.update">#</a></h4>
+<div class="doc">
+<pre class="source">
+void update(delta) {
+ if (ax.abs() &gt; 1) {
+   ax *= 0.8;
+ } else {
+   ax = 0;
+ }
+ if (ay.abs() &gt; 1) {
+   ay *= 0.8;
+ } else {
+   ay = 0;
+ }
+ x += ax * delta / 100;
+ y += ay * delta / 100;
+ borders();
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-06 00:43:47.694</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        

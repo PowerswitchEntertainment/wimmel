@@ -1,0 +1,190 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ResourceManager class / wimmel Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wimmel" data-type="ResourceManager">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wimmel.html">wimmel</a> &rsaquo; <a href="../wimmel/ResourceManager.html">ResourceManager</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../metadata.html">metadata</a></h2><h2><div class="icon-library"></div><a href="../wimmel.html">wimmel</a></h2><ul class="icon">
+<li><a href="../wimmel/Camera.html"><div class="icon-class"></div>Camera</a></li>
+<li><a href="../wimmel/Car.html"><div class="icon-class"></div>Car</a></li>
+<li><a href="../wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
+<li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
+<li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><div class="icon-class"></div><strong>ResourceManager</strong></li>
+<li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>ResourceManager</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Resource manger
+supervises ressource loading and call a specific function after all resources have been loaded successfully</p>
+<pre class="source">
+class ResourceManager {
+ var loading = 0;
+ var notify = false;
+ var notifyFunction;
+ 
+ /**
+  * Register new resource to be loaded
+  */
+ void registerLoading() {
+   loading++;
+ }
+ 
+ /**
+  * Register finished loading process
+  */
+ void registerFinished() {
+   loading--;
+   checkNotify();
+ }
+ 
+ /**
+  * Register function to be called when all resources have been loaded
+  */
+ void registerNotifyFunction(fkt) {
+   notifyFunction = fkt;
+   notify = true;
+   checkNotify();
+ }
+ 
+ /**
+  * check if all resources have been loaded
+  */
+ void checkNotify() {
+   if (loading &lt; 1 &amp;&amp; notify == true) notifyFunction();
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="loading">
+<button class="show-code">Code</button>
+var         <strong>loading</strong> <a class="anchor-link"
+            href="#loading"
+            title="Permalink to ResourceManager.loading">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+loading = 0
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="notify">
+<button class="show-code">Code</button>
+var         <strong>notify</strong> <a class="anchor-link"
+            href="#notify"
+            title="Permalink to ResourceManager.notify">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+notify = false
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="notifyFunction">
+<button class="show-code">Code</button>
+var         <strong>notifyFunction</strong> <a class="anchor-link"
+            href="#notifyFunction"
+            title="Permalink to ResourceManager.notifyFunction">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+notifyFunction
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="checkNotify">
+<button class="show-code">Code</button>
+void <strong>checkNotify</strong>() <a class="anchor-link" href="#checkNotify"
+              title="Permalink to ResourceManager.checkNotify">#</a></h4>
+<div class="doc">
+<p>check if all resources have been loaded</p>
+<pre class="source">
+void checkNotify() {
+ if (loading &lt; 1 &amp;&amp; notify == true) notifyFunction();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="registerFinished">
+<button class="show-code">Code</button>
+void <strong>registerFinished</strong>() <a class="anchor-link" href="#registerFinished"
+              title="Permalink to ResourceManager.registerFinished">#</a></h4>
+<div class="doc">
+<p>Register finished loading process</p>
+<pre class="source">
+void registerFinished() {
+ loading--;
+ checkNotify();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="registerLoading">
+<button class="show-code">Code</button>
+void <strong>registerLoading</strong>() <a class="anchor-link" href="#registerLoading"
+              title="Permalink to ResourceManager.registerLoading">#</a></h4>
+<div class="doc">
+<p>Register new resource to be loaded</p>
+<pre class="source">
+void registerLoading() {
+ loading++;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="registerNotifyFunction">
+<button class="show-code">Code</button>
+void <strong>registerNotifyFunction</strong>(fkt) <a class="anchor-link" href="#registerNotifyFunction"
+              title="Permalink to ResourceManager.registerNotifyFunction">#</a></h4>
+<div class="doc">
+<p>Register function to be called when all resources have been loaded</p>
+<pre class="source">
+void registerNotifyFunction(fkt) {
+ notifyFunction = fkt;
+ notify = true;
+ checkNotify();
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-06 00:43:47.741</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        

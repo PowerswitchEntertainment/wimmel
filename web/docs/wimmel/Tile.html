@@ -1,0 +1,187 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Tile class / wimmel Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wimmel" data-type="Tile">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wimmel.html">wimmel</a> &rsaquo; <a href="../wimmel/Tile.html">Tile</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../metadata.html">metadata</a></h2><h2><div class="icon-library"></div><a href="../wimmel.html">wimmel</a></h2><ul class="icon">
+<li><a href="../wimmel/Camera.html"><div class="icon-class"></div>Camera</a></li>
+<li><a href="../wimmel/Car.html"><div class="icon-class"></div>Car</a></li>
+<li><a href="../wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
+<li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
+<li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
+<li><div class="icon-class"></div><strong>Tile</strong></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>Tile</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Tile of the background image
+The background image is tiled to prevent timeouts and memory overload and to save render time  </p>
+<pre class="source">
+class Tile {
+ var image = new ImageElement();
+ var manager;
+ var error=true;
+ 
+ /**
+  * Resource was successfully loaded
+  */
+ void onload(ev) {
+   manager.registerFinished();
+   error=false;
+ }
+ 
+ /**
+  * Resource couldn't be loaded
+  */
+ void onerror(ev) {
+   // TODO: create error message
+   manager.registerFinished();
+ }
+ 
+ /**
+  * Constructor
+  * @param manager resource manager instance to be notified
+  * @param prefix  tile prefix (folder)
+  * @param part    tile part (number)
+  */
+ Tile(manager, prefix, part) {
+   this.manager = manager;
+   
+   image.onLoad.listen(onload);
+   image.onError.listen(onerror);
+   manager.registerLoading();
+   image.src = "${prefix}/${part}.png";
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Tile">
+<button class="show-code">Code</button>
+new <strong>Tile</strong>(manager, prefix, part) <a class="anchor-link" href="#Tile"
+              title="Permalink to Tile.Tile">#</a></h4>
+<div class="doc">
+<p>Constructor
+@param manager resource manager instance to be notified
+@param prefix  tile prefix (folder)
+@param part    tile part (number)</p>
+<pre class="source">
+Tile(manager, prefix, part) {
+ this.manager = manager;
+ 
+ image.onLoad.listen(onload);
+ image.onError.listen(onerror);
+ manager.registerLoading();
+ image.src = "${prefix}/${part}.png";
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="error">
+<button class="show-code">Code</button>
+var         <strong>error</strong> <a class="anchor-link"
+            href="#error"
+            title="Permalink to Tile.error">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+error=true
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="image">
+<button class="show-code">Code</button>
+var         <strong>image</strong> <a class="anchor-link"
+            href="#image"
+            title="Permalink to Tile.image">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+image = new ImageElement()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="manager">
+<button class="show-code">Code</button>
+var         <strong>manager</strong> <a class="anchor-link"
+            href="#manager"
+            title="Permalink to Tile.manager">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+manager
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="onerror">
+<button class="show-code">Code</button>
+void <strong>onerror</strong>(ev) <a class="anchor-link" href="#onerror"
+              title="Permalink to Tile.onerror">#</a></h4>
+<div class="doc">
+<p>Resource couldn't be loaded</p>
+<pre class="source">
+void onerror(ev) {
+ // TODO: create error message
+ manager.registerFinished();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="onload">
+<button class="show-code">Code</button>
+void <strong>onload</strong>(ev) <a class="anchor-link" href="#onload"
+              title="Permalink to Tile.onload">#</a></h4>
+<div class="doc">
+<p>Resource was successfully loaded</p>
+<pre class="source">
+void onload(ev) {
+ manager.registerFinished();
+ error=false;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-06 00:43:47.736</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        

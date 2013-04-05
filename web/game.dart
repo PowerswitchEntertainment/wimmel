@@ -1,43 +1,52 @@
 part of wimmel;
 
+/**
+ * Game main class
+ * contains the render loop
+ */
 class Game {
   var canvas;
-  CanvasRenderingContext2D context;
-  var pause = true;
-  var delta = 100;
-  var start = 0;
-  var images;
-  var maus;
-  var camera;
-  var map;
+  CanvasRenderingContext2D context; // render context
+  var pause = true; // pause the game
+  var delta = 100; // speed variable for frame rate independent programming
+  var start = 0; // timestamp of the last frame
+  var images; // background image list
+  var maus; // mouse instance
+  var camera; // camera instance
+  var map; // 
   var ressources;
   var shiftdown = false;
   var testcar;
   
-  
+  /* consts */
   const MAPWIDTH = 16;
   const MAPHEIGHT = 12;
   const SCREENWIDTH = 4000;
   const SCREENHEIGHT = 3000;
 
-
-  Game(ressources) {
+  /**
+   * Constructor
+   * @param resources loaded game resources
+   */
+  Game(resources) {
+    /* get the html canvas */
     canvas = query("#screen");
     context = canvas.getContext('2d');
+    // extract images from resources
     images = ressources["images"];
     this.ressources = ressources;
     
-    maus = new Maus();
-    camera = new Camera(SCREENWIDTH, SCREENHEIGHT);
-    testcar = new Car();
+    maus = new Maus(); // new mouse instance
+    camera = new Camera(SCREENWIDTH, SCREENHEIGHT); // new camera instance
+    testcar = new Car(); // new car instance TODO: remove it
     
+    /* window listener */
     window.onResize.listen((ev) {resize();});
-    
     window.onMouseDown.listen(mouseDown);
     window.onMouseUp.listen(mouseUp);
     window.onMouseMove.listen(mouseMove);
-    
     window.onKeyDown.listen((ev) {
+      /* map editor hack */
       if (ev.keyCode == 17)
         shiftdown = true;
       if (ev.keyCode == 65)
@@ -50,15 +59,21 @@ class Game {
     });
     window.onKeyUp.listen((ev) {shiftdown = false;});
 
+    /* initial canvas resize */
     resize();
   }
   
+  /**
+   * mouse down handler
+   */
   void mouseDown(ev) {
+    /* save coords for future movements */
     maus.pressed = true;
     maus.x = ev.clientX;
     maus.y = ev.clientY;
-    camera.move(0,0);
+    camera.move(0,0); // stop camera motion
     
+    /* Map editor hack */
     if (shiftdown == true)
     {
       print("{\"x\": ${maus.x+camera.x}, \"y\": ${maus.y+camera.y}},");
@@ -68,11 +83,18 @@ class Game {
     }
   }
   
+  /**
+   *  mouse button release handler
+   */
   void mouseUp(ev) {
     maus.pressed = false;
   }
   
+  /**
+   * mouse movement handler
+   */
   void mouseMove(ev) {
+    /* camera movement */
     if (maus.pressed == true && shiftdown == false) {
       var dx = maus.x - ev.clientX;
       var dy = maus.y - ev.clientY;
@@ -82,12 +104,14 @@ class Game {
     }
   }
   
+  /** game start */
   void begin() {
     map = ressources["map"].data;
     pause = false;
     request();
   }
 
+  /** resize layout */
   void resize() {
     var can = query("#screen");
     can.height = can.offsetHeight;
@@ -95,10 +119,12 @@ class Game {
     //request(); // don't do this!
   }
   
+  /** request new animation frame */
   void request() {
     window.requestAnimationFrame(loop);
   }
   
+  /** MAIN LOOP */
   void loop(time) {
    
     // calculate game speed
@@ -118,6 +144,7 @@ class Game {
       }
     }
     
+    /* RENDER */
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
     context.strokeStyle = "yellow";
@@ -146,17 +173,27 @@ class Game {
 
     
     // request new Frame
-  new Timer(new Duration(milliseconds: 50), request);    
+    new Timer(new Duration(milliseconds: 50), request);    
   }
 }
 
+/**
+ * Mouse class
+ */
 class Maus {
   var pressed;
   var x, y;
 }
 
+/**
+ * car class
+ */
 class Car {
   var segment;
+  
+  /**
+   * Constructor
+   */
   Car() {
     segment = "A1";
   }

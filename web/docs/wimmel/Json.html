@@ -1,0 +1,130 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Json class / wimmel Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wimmel" data-type="Json">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wimmel.html">wimmel</a> &rsaquo; <a href="../wimmel/Json.html">Json</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../metadata.html">metadata</a></h2><h2><div class="icon-library"></div><a href="../wimmel.html">wimmel</a></h2><ul class="icon">
+<li><a href="../wimmel/Camera.html"><div class="icon-class"></div>Camera</a></li>
+<li><a href="../wimmel/Car.html"><div class="icon-class"></div>Car</a></li>
+<li><a href="../wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
+<li><div class="icon-class"></div><strong>Json</strong></li>
+<li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
+<li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>Json</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Json {
+ var data;
+ var manager;
+ 
+ Json(manager, url) {
+   this.manager = manager;
+   var request = HttpRequest.getString(url).then(onDataLoaded);
+   manager.registerLoading();
+ }
+ 
+ void onDataLoaded(String responseText) {
+   data = parse(responseText);
+   manager.registerFinished();
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Json">
+<button class="show-code">Code</button>
+new <strong>Json</strong>(manager, url) <a class="anchor-link" href="#Json"
+              title="Permalink to Json.Json">#</a></h4>
+<div class="doc">
+<pre class="source">
+Json(manager, url) {
+ this.manager = manager;
+ var request = HttpRequest.getString(url).then(onDataLoaded);
+ manager.registerLoading();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="data">
+<button class="show-code">Code</button>
+var         <strong>data</strong> <a class="anchor-link"
+            href="#data"
+            title="Permalink to Json.data">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+data
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="manager">
+<button class="show-code">Code</button>
+var         <strong>manager</strong> <a class="anchor-link"
+            href="#manager"
+            title="Permalink to Json.manager">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+manager
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="onDataLoaded">
+<button class="show-code">Code</button>
+void <strong>onDataLoaded</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> responseText) <a class="anchor-link" href="#onDataLoaded"
+              title="Permalink to Json.onDataLoaded">#</a></h4>
+<div class="doc">
+<pre class="source">
+void onDataLoaded(String responseText) {
+ data = parse(responseText);
+ manager.registerFinished();
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-06 00:43:47.682</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        

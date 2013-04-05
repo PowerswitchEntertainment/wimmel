@@ -1,0 +1,15 @@
+{
+  "transitions":
+  {
+    "A1": 
+    {
+      "follow":
+      [
+        {
+          "segment": "A2",
+          "condition": "true;" 
+        }
+      ]
+    }
+  }
+}

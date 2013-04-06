@@ -179,9 +179,27 @@ class Game {
       
       
       // TESTCAR TODO
-      if (testcar.segment == a["id"])
+      if (testcar.segment == a["id"]) {
         context.strokeStyle = "red";
-      else
+        
+        // Testcar update
+        if (testcar.update(delta/10) == 1) {
+          testcar.goal = new Point(a["coords"][testcar.point]["x"], a["coords"][testcar.point]["y"]);
+
+          testcar.point++;
+          if (testcar.point == a["coords"].length) {
+            if (resources["transitions"].data["transitions"].containsKey(testcar.segment))
+            {
+              //context.fillText(resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"],20,20);
+              testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"];
+            }
+            /*else {
+              //context.fillText(testcar.segment, 20,40);
+            }*/
+            testcar.point = 0;
+          }          
+        }      
+      } else
         context.strokeStyle = "yellow";
       context.stroke();
       context.shadowBlur = 0;
@@ -189,19 +207,21 @@ class Game {
     }
     // print(map["segments"][0]["coords"][0]["x"]);
 
-    if (resources["transitions"].data["transitions"].containsKey(testcar.segment))
-    {
-      context.fillText(resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"],20,20);
-      testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"];
-    }
-    else {
-      context.fillText(testcar.segment, 20,40);
-    }
+
+    
+    // TESTCAR DISPLAY
+    context.strokeStyle = "blue";
+    context.beginPath();
+    context.moveTo(testcar.pos.x-5 - camera.x, testcar.pos.y-5 - camera.y);
+    context.lineTo(testcar.pos.x+5 - camera.x, testcar.pos.y+5 - camera.y);
+    //context.lineTo(testcar.goal.x, testcar.goal.y);
+    context.stroke();
+
     
     //print(resources["transitions"].data["transitions"]);
     
     // request new Frame
-    new Timer(new Duration(milliseconds: 100), request); // TODO check millisecond value    
+    new Timer(new Duration(milliseconds: 20), request); // TODO check millisecond value    
   }
 }
 
@@ -218,12 +238,28 @@ class Maus {
  */
 class Car {
   var segment;
+  var point;
+  var pos = new Point(0,0);
+  var goal = new Point(0,0);
   
   /**
    * Constructor
    */
   Car() {
     segment = "A1";
+    point = 0;
+  }
+  
+  int update(delta) {
+    var d = goal - pos;
+    
+    if (goal.squaredDistanceTo(pos) > delta*delta) {
+      var n = d * (1/goal.distanceTo(pos));
+      pos += n * delta;
+      return 0;
+    } else {
+      return 1;
+    }
   }
 }
 

@@ -30,25 +30,25 @@ part 'json.dart';
 /**
  * Main-Function
  * 
- * load all game ressources and prepare to launch game 
+ * load all game resources and prepare to launch game 
  */
 void main() {
   var manager = new ResourceManager();
   var tiles = [];                      
-  var ressources = new Map();          
+  var resources = new Map();          
   
   /* Load tiles */
   for (var a = 1; a < 193; a++) {
     tiles.add(new Tile(manager, "back", into4(a))); 
   }
-  ressources["images"] = tiles;
+  resources["images"] = tiles;
   
   /* Load JSON */
-  ressources["map"] = new Json(manager, "map.json");
-  ressources["transitions"] = new Json(manager, "transitions.json");
+  resources["map"] = new Json(manager, "map.json");
+  resources["transitions"] = new Json(manager, "transitions.json");
   
   /* init game */
-  var game = new Game(ressources);
+  var game = new Game(resources);
   
   /* start game when all resources are loaded */
   manager.registerNotifyFunction(game.begin);

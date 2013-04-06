@@ -1,13 +1,90 @@
 {
-  "transitions":
-  {
-    "A1": 
-    {
-      "follow":
-      [
+  "transitions": {
+    "A1": {
+      "follow": [
+        {
+          "segment": "V1-2",
+          "condition": "true" 
+        },
+        {
+          "segment": "V1-4",
+          "condition": "true" 
+        }
+      ]
+    },
+    "V1-2": {
+      "follow": [
         {
           "segment": "A2",
-          "condition": "true;" 
+          "condition": "true"
+        }
+      ]
+    },
+    "A2": {
+      "follow": [
+        {
+          "segment": "V2-3",
+          "condition": "true" 
+        },
+        {
+          "segment": "V2-6",
+          "condition": "true" 
+        }
+      ]
+    },
+    "V2-3": {
+      "follow": [
+        {
+          "segment": "A3",
+          "condition": "true"
+        }
+      ]
+    },
+    "A3": {
+      "follow": [
+        {
+          "segment": "V3-7",
+          "condition": "true"
+        }
+      ]
+    },
+    "V3-7": {
+      "follow": [
+        {
+          "segment": "A7",
+          "condition": "true"
+        }
+      ]
+    },
+    "A7": {
+      "follow": [
+        {
+          "segment": "V7-8",
+          "condition": "true"
+        }
+      ]
+    },
+    "V7-8": {
+      "follow": [
+        {
+          "segment": "A8",
+          "condition": "true"
+        }
+      ]
+    },
+    "A8": {
+      "follow": [
+        {
+          "segment": "V8-2",
+          "condition": "true"
+        }
+      ]
+    },
+    "V8-2": {
+      "follow": [
+        {
+          "segment": "A2",
+          "condition": "true"
         }
       ]
     }

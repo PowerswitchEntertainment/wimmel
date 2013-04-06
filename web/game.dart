@@ -1,3 +1,19 @@
+/*   This file is part of wimmel.
+ *
+ *   Wimmel is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Wimmel is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with wimmel.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 part of wimmel;
 
 /**
@@ -14,7 +30,7 @@ class Game {
   var maus; // mouse instance
   var camera; // camera instance
   var map; // 
-  var ressources;
+  var resources;
   var shiftdown = false;
   var testcar;
   
@@ -33,8 +49,8 @@ class Game {
     canvas = query("#screen");
     context = canvas.getContext('2d');
     // extract images from resources
-    images = ressources["images"];
-    this.ressources = ressources;
+    images = resources["images"];
+    this.resources = resources;
     
     maus = new Maus(); // new mouse instance
     camera = new Camera(SCREENWIDTH, SCREENHEIGHT); // new camera instance
@@ -106,7 +122,7 @@ class Game {
   
   /** game start */
   void begin() {
-    map = ressources["map"].data;
+    map = resources["map"].data;
     pause = false;
     request();
   }
@@ -161,19 +177,31 @@ class Game {
       }
       context.shadowBlur = 2;
       
+      
+      // TESTCAR TODO
       if (testcar.segment == a["id"])
         context.strokeStyle = "red";
       else
         context.strokeStyle = "yellow";
       context.stroke();
       context.shadowBlur = 0;
-      context.fillText(a["id"], a["coords"][(a["coords"].length/2).round()]["x"]-camera.x, a["coords"][(a["coords"].length/2).round()]["y"]-camera.y);
+      context.fillText(a["id"], a["coords"][(a["coords"].length/2).floor()]["x"]-camera.x, a["coords"][(a["coords"].length/2).floor()]["y"]-camera.y);
     }
     // print(map["segments"][0]["coords"][0]["x"]);
 
+    if (resources["transitions"].data["transitions"].containsKey(testcar.segment))
+    {
+      context.fillText(resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"],20,20);
+      testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"];
+    }
+    else {
+      context.fillText(testcar.segment, 20,40);
+    }
+    
+    //print(resources["transitions"].data["transitions"]);
     
     // request new Frame
-    new Timer(new Duration(milliseconds: 50), request);    
+    new Timer(new Duration(milliseconds: 100), request); // TODO check millisecond value    
   }
 }
 

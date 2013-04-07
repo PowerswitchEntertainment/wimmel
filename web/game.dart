@@ -185,6 +185,8 @@ class Game {
           //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
           context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
         }
+        context.stroke();
+        context.fillText(a["id"], a["coords"][(a["coords"].length/2).floor()]["x"]-camera.x, a["coords"][(a["coords"].length/2).floor()]["y"]-camera.y);         
         context.shadowBlur = 2;
       }
       
@@ -197,7 +199,8 @@ class Game {
           if (testcar.point == a["coords"].length) {
             if (resources["transitions"].data["transitions"].containsKey(testcar.segment))
             {
-              testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"];
+              var r = new Random().nextInt(resources["transitions"].data["transitions"][testcar.segment]["follow"].length);
+              testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][r]["segment"];
             }
             testcar.point = 0;
           }          
@@ -205,6 +208,7 @@ class Game {
       }
       // print(map["segments"][0]["coords"][0]["x"]);
     }
+    
     
     context.save();
 

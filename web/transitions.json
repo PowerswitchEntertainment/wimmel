@@ -87,6 +87,62 @@
           "condition": "true"
         }
       ]
+    },
+    "V2-6": {
+      "follow": [
+        {
+          "segment": "A6",
+          "condition": "true"
+        }
+      ]
+    },
+    "A6": {
+      "follow": [
+        {
+          "segment": "V6-9",
+          "condition": "true"
+        }
+      ]
+    },
+    "V6-9": {
+      "follow": [
+        {
+          "segment": "A9",
+          "condition": "true"
+        }
+      ]
+    },
+    "A9": {
+      "follow": [
+        {
+          "segment": "V9-10",
+          "condition": "true"
+        }
+      ]
+    },
+    "V9-10": {
+      "follow": [
+        {
+          "segment": "A10",
+          "condition": "true"
+        }
+      ]
+    },
+    "A10": {
+      "follow": [
+        {
+          "segment": "V10-7",
+          "condition": "true"
+        }
+      ]
+    },
+    "V10-7": {
+      "follow": [
+        {
+          "segment": "A7",
+          "condition": "true"
+        }
+      ]
     }
   }
 }

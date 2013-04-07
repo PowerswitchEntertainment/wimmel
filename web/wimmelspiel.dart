@@ -26,6 +26,7 @@ part 'tile.dart';
 part 'game.dart';
 part 'camera.dart';
 part 'json.dart';
+part 'object.dart';
 
 /**
  * Main-Function
@@ -47,6 +48,12 @@ void main() {
   resources["map"] = new Json(manager, "map.json");
   resources["transitions"] = new Json(manager, "transitions.json");
   
+  /* Load Objects */
+  resources["car"] = new List();
+  for (var a = 1; a < 9; a++) {
+    resources["car"].add(new Object(manager, "car", into4(a)));
+  }
+    
   /* init game */
   var game = new Game(resources);
   

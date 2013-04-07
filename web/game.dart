@@ -207,17 +207,10 @@ class Game {
     }
     // print(map["segments"][0]["coords"][0]["x"]);
 
+    // testcar display
+    context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 16, testcar.pos.y - camera.y - 16);
 
-    
-    // TESTCAR DISPLAY
-    context.strokeStyle = "blue";
-    context.beginPath();
-    context.moveTo(testcar.pos.x-5 - camera.x, testcar.pos.y-5 - camera.y);
-    context.lineTo(testcar.pos.x+5 - camera.x, testcar.pos.y+5 - camera.y);
-    //context.lineTo(testcar.goal.x, testcar.goal.y);
-    context.stroke();
-
-    
+    context.fillText(((testcar.goal - testcar.pos) * (1/testcar.goal.distanceTo(testcar.pos))).x,20,20);
     //print(resources["transitions"].data["transitions"]);
     
     // request new Frame
@@ -261,5 +254,35 @@ class Car {
       return 1;
     }
   }
+  
+  int rotation() {
+    var n = (goal - pos) * (1/goal.distanceTo(pos));
+    
+    if (n.x < -0.5) {
+      if (n.y < -0.5) {
+        return 3;
+      } else if (n.y > 0.5) {
+        return 1;
+      } else {
+        return 2;
+      }
+    } else if (n.x > 0.5) {
+      if (n.y < -0.5) {
+        return 5;
+      } else if (n.y > 0.5) {
+        return 7;
+      } else {
+        return 6;
+      }      
+    } else {
+      if (n.y < -0.5) {
+        return 4;
+      } else if (n.y > 0.5) {
+        return 0;
+      }
+    }
+    return 0; // TODO: do not turn at all
+  }
+  
 }
 

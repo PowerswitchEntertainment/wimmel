@@ -33,6 +33,7 @@ class Game {
   var resources;
   var shiftdown = false;
   var testcar;
+  var run = 0;
   
   /* consts */
   const MAPWIDTH = 16;
@@ -204,10 +205,17 @@ class Game {
       }
       // print(map["segments"][0]["coords"][0]["x"]);
     }
-      
+    
+    context.save();
+    
     // testcar display
-    context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 16, testcar.pos.y - camera.y - 16);
-
+    //context.translate(testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
+    context.translate(testcar.pos.x - camera.x, testcar.pos.y - camera.y);
+    context.rotate(testcar.degrees());
+    context.drawImage(resources["car"][testcar.rotation()].image, -24, -24); 
+    //context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
+    context.restore();
+    
     // request new Frame
     new Timer(new Duration(milliseconds: 20), request); // TODO check millisecond value    
   }
@@ -250,29 +258,42 @@ class Car {
     }
   }
   
+  double degrees() {
+    var n = (goal - pos) * (1/goal.distanceTo(pos));
+    var d = 0;
+    if (n.y < 0)
+    {
+      d = asin(n.x)+PI;
+    } else {
+      d = -asin(n.x);
+    }
+    d -= rotation()*PI/4;
+    return d;
+  }
+  
   int rotation() {
     var n = (goal - pos) * (1/goal.distanceTo(pos));
     
-    if (n.x < -0.5) {
-      if (n.y < -0.5) {
+    if (n.x < -0.383) {
+      if (n.y < -0.383) {
         return 3;
-      } else if (n.y > 0.5) {
+      } else if (n.y > 0.383) {
         return 1;
       } else {
         return 2;
       }
-    } else if (n.x > 0.5) {
-      if (n.y < -0.5) {
+    } else if (n.x > 0.383) {
+      if (n.y < -0.383) {
         return 5;
-      } else if (n.y > 0.5) {
+      } else if (n.y > 0.383) {
         return 7;
       } else {
         return 6;
       }      
     } else {
-      if (n.y < -0.5) {
+      if (n.y < -0.383) {
         return 4;
-      } else if (n.y > 0.5) {
+      } else if (n.y > 0.383) {
         return 0;
       }
     }

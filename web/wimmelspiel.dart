@@ -27,6 +27,7 @@ part 'game.dart';
 part 'camera.dart';
 part 'json.dart';
 part 'object.dart';
+part 'car.dart';
 
 /**
  * Main-Function

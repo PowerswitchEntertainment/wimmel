@@ -207,9 +207,8 @@ class Game {
     }
     
     context.save();
-    
+
     // testcar display
-    //context.translate(testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
     context.translate(testcar.pos.x - camera.x, testcar.pos.y - camera.y);
     context.rotate(testcar.degrees());
     context.drawImage(resources["car"][testcar.rotation()].image, -24, -24); 
@@ -227,78 +226,5 @@ class Game {
 class Maus {
   var pressed;
   var x, y;
-}
-
-/**
- * car class
- */
-class Car {
-  var segment;
-  var point;
-  var pos = new Point(0,0);
-  var goal = new Point(0,0);
-  
-  /**
-   * Constructor
-   */
-  Car() {
-    segment = "A1";
-    point = 0;
-  }
-  
-  int update(delta) {
-    var d = goal - pos;
-    
-    if (goal.squaredDistanceTo(pos) > delta*delta) {
-      var n = d * (1/goal.distanceTo(pos));
-      pos += n * delta;
-      return 0;
-    } else {
-      return 1;
-    }
-  }
-  
-  double degrees() {
-    var n = (goal - pos) * (1/goal.distanceTo(pos));
-    var d = 0;
-    if (n.y < 0)
-    {
-      d = asin(n.x)+PI;
-    } else {
-      d = -asin(n.x);
-    }
-    d -= rotation()*PI/4;
-    return d;
-  }
-  
-  int rotation() {
-    var n = (goal - pos) * (1/goal.distanceTo(pos));
-    
-    if (n.x < -0.383) {
-      if (n.y < -0.383) {
-        return 3;
-      } else if (n.y > 0.383) {
-        return 1;
-      } else {
-        return 2;
-      }
-    } else if (n.x > 0.383) {
-      if (n.y < -0.383) {
-        return 5;
-      } else if (n.y > 0.383) {
-        return 7;
-      } else {
-        return 6;
-      }      
-    } else {
-      if (n.y < -0.383) {
-        return 4;
-      } else if (n.y > 0.383) {
-        return 0;
-      }
-    }
-    return 0; // TODO: do not turn at all
-  }
-  
 }
 

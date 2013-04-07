@@ -39,7 +39,8 @@ class Game {
   const MAPHEIGHT = 12;
   const SCREENWIDTH = 4000;
   const SCREENHEIGHT = 3000;
-
+  const MAPRENDER = false;
+  
   /**
    * Constructor
    * @param resources loaded game resources
@@ -155,64 +156,58 @@ class Game {
     for (var y = 0; y < MAPHEIGHT; y++) {
       for (var x = 0; x < MAPWIDTH; x++) {
         if (images[x+y*16].error == false) {
-          context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+          if (x*250-camera.x > -250 && y*250-camera.y > -250 && x*250-camera.x < window.innerWidth && y*250-camera.y < window.innerHeight) {
+            context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+          }
         }
       }
     }
+
+    context.fillText(delta,1,10);
+
     
     /* RENDER */
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.strokeStyle = "yellow";
-    context.lineWidth = 4;
+    if (MAPRENDER == true) {
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 0;
+      context.strokeStyle = "yellow";
+      context.lineWidth = 4;
+    }
     
     for (var a in map["segments"])
     {
-      context.beginPath();
-      context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
-      for (var b in a["coords"])
-      {
-        //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
-        context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+      if (MAPRENDER == true) {
+        context.beginPath();
+        context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
+        for (var b in a["coords"])
+        {
+          //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
+          context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+        }
+        context.shadowBlur = 2;
       }
-      context.shadowBlur = 2;
-      
       
       // TESTCAR TODO
       if (testcar.segment == a["id"]) {
-        context.strokeStyle = "red";
-        
         // Testcar update
         if (testcar.update(delta/10) == 1) {
           testcar.goal = new Point(a["coords"][testcar.point]["x"], a["coords"][testcar.point]["y"]);
-
           testcar.point++;
           if (testcar.point == a["coords"].length) {
             if (resources["transitions"].data["transitions"].containsKey(testcar.segment))
             {
-              //context.fillText(resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"],20,20);
               testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][0]["segment"];
             }
-            /*else {
-              //context.fillText(testcar.segment, 20,40);
-            }*/
             testcar.point = 0;
           }          
         }      
-      } else
-        context.strokeStyle = "yellow";
-      context.stroke();
-      context.shadowBlur = 0;
-      context.fillText(a["id"], a["coords"][(a["coords"].length/2).floor()]["x"]-camera.x, a["coords"][(a["coords"].length/2).floor()]["y"]-camera.y);
+      }
+      // print(map["segments"][0]["coords"][0]["x"]);
     }
-    // print(map["segments"][0]["coords"][0]["x"]);
-
+      
     // testcar display
     context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 16, testcar.pos.y - camera.y - 16);
 
-    context.fillText(((testcar.goal - testcar.pos) * (1/testcar.goal.distanceTo(testcar.pos))).x,20,20);
-    //print(resources["transitions"].data["transitions"]);
-    
     // request new Frame
     new Timer(new Duration(milliseconds: 20), request); // TODO check millisecond value    
   }

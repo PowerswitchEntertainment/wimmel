@@ -30,6 +30,7 @@
 <li><a href="../wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
 <li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
 <li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="../wimmel/Object.html"><div class="icon-class"></div>Object</a></li>
 <li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
 <li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
 </ul>
@@ -54,12 +55,12 @@ class Camera {
  
  void update(delta) {
    if (ax.abs() &gt; 1) {
-     ax *= 0.8;
+     ax *= 0.9;
    } else {
      ax = 0;
    }
    if (ay.abs() &gt; 1) {
-     ay *= 0.8;
+     ay *= 0.9;
    } else {
      ay = 0;
    }
@@ -219,12 +220,12 @@ void <strong>update</strong>(delta) <a class="anchor-link" href="#update"
 <pre class="source">
 void update(delta) {
  if (ax.abs() &gt; 1) {
-   ax *= 0.8;
+   ax *= 0.9;
  } else {
    ax = 0;
  }
  if (ay.abs() &gt; 1) {
-   ay *= 0.8;
+   ay *= 0.9;
  } else {
    ay = 0;
  }
@@ -240,7 +241,7 @@ void update(delta) {
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-04-06 00:43:47.694</div>
+          <div>This page was generated at 2013-04-08 00:20:02.395</div>
         </div>
         <script async src="../client-static.js"></script>
         </body></html>

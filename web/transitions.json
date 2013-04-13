@@ -1,5 +1,61 @@
 {
   "transitions": {
+    "V11-6": {
+      "follow": [
+        {
+          "segment": "A6",
+          "condition": "true"
+        }
+      ]
+    },
+    "A11": {
+      "follow": [
+        {
+          "segment": "V11-6",
+          "condition": "true"
+        }
+      ]
+    },
+    "V5-11": {
+      "follow": [
+        {
+          "segment": "A11",
+          "condition": "true"
+        }
+      ]
+    },
+    "A5": {
+      "follow": [
+        {
+          "segment": "V5-11",
+          "condition": "true"          
+        }
+      ]
+    },
+    "V4-5": {
+      "follow": [
+        {
+          "segment": "A5",
+          "condition": "true"
+        }
+      ]
+    }, 
+    "A4": {
+      "follow": [
+        {
+          "segment": "V4-5",
+          "condition": "true"
+        }
+      ]
+    },
+    "V1-4": {
+      "follow": [
+        {
+          "segment": "A4",
+          "condition": "true"
+        }
+      ]
+    },
     "A1": {
       "follow": [
         {

@@ -30,6 +30,7 @@
 <li><div class="icon-class"></div><strong>Game</strong></li>
 <li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
 <li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="../wimmel/Object.html"><div class="icon-class"></div>Object</a></li>
 <li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
 <li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
 </ul>
@@ -54,16 +55,18 @@ class Game {
  var maus; // mouse instance
  var camera; // camera instance
  var map; // 
- var ressources;
+ var resources;
  var shiftdown = false;
  var testcar;
+ var run = 0;
  
  /* consts */
  const MAPWIDTH = 16;
  const MAPHEIGHT = 12;
  const SCREENWIDTH = 4000;
  const SCREENHEIGHT = 3000;
-
+ const MAPRENDER = false;
+ 
  /**
   * Constructor
   * @param resources loaded game resources
@@ -73,8 +76,8 @@ class Game {
    canvas = query("#screen");
    context = canvas.getContext('2d');
    // extract images from resources
-   images = ressources["images"];
-   this.ressources = ressources;
+   images = resources["images"];
+   this.resources = resources;
    
    maus = new Maus(); // new mouse instance
    camera = new Camera(SCREENWIDTH, SCREENHEIGHT); // new camera instance
@@ -146,7 +149,7 @@ class Game {
  
  /** game start */
  void begin() {
-   map = ressources["map"].data;
+   map = resources["map"].data;
    pause = false;
    request();
  }
@@ -179,41 +182,70 @@ class Game {
    for (var y = 0; y &lt; MAPHEIGHT; y++) {
      for (var x = 0; x &lt; MAPWIDTH; x++) {
        if (images[x+y*16].error == false) {
-         context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+         if (x*250-camera.x &gt; -250 &amp;&amp; y*250-camera.y &gt; -250 &amp;&amp; x*250-camera.x &lt; window.innerWidth &amp;&amp; y*250-camera.y &lt; window.innerHeight) {
+           context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+         }
        }
      }
    }
+
+   context.fillText(delta,1,10);
+
    
    /* RENDER */
-   context.shadowOffsetX = 0;
-   context.shadowOffsetY = 0;
-   context.strokeStyle = "yellow";
-   context.lineWidth = 4;
+   if (MAPRENDER == true) {
+     context.shadowOffsetX = 0;
+     context.shadowOffsetY = 0;
+     context.strokeStyle = "yellow";
+     context.lineWidth = 4;
+   }
    
    for (var a in map["segments"])
    {
-     context.beginPath();
-     context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
-     for (var b in a["coords"])
-     {
-       //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
-       context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+     if (MAPRENDER == true) {
+       context.beginPath();
+       context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
+       for (var b in a["coords"])
+       {
+         //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
+         context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+       }
+       context.stroke();
+       context.fillText(a["id"], a["coords"][(a["coords"].length/2).floor()]["x"]-camera.x, a["coords"][(a["coords"].length/2).floor()]["y"]-camera.y);         
+       context.shadowBlur = 2;
      }
-     context.shadowBlur = 2;
      
-     if (testcar.segment == a["id"])
-       context.strokeStyle = "red";
-     else
-       context.strokeStyle = "yellow";
-     context.stroke();
-     context.shadowBlur = 0;
-     context.fillText(a["id"], a["coords"][(a["coords"].length/2).round()]["x"]-camera.x, a["coords"][(a["coords"].length/2).round()]["y"]-camera.y);
+     // TESTCAR TODO
+     if (testcar.segment == a["id"]) {
+       // Testcar update
+       if (testcar.update(delta/10) == 1) {
+         testcar.goal = new Point(a["coords"][testcar.point]["x"], a["coords"][testcar.point]["y"]);
+         testcar.point++;
+         if (testcar.point == a["coords"].length) {
+           if (resources["transitions"].data["transitions"].containsKey(testcar.segment))
+           {
+             var r = new Random().nextInt(resources["transitions"].data["transitions"][testcar.segment]["follow"].length);
+             testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][r]["segment"];
+           }
+           testcar.point = 0;
+         }          
+       }      
+     }
+     // print(map["segments"][0]["coords"][0]["x"]);
    }
-   // print(map["segments"][0]["coords"][0]["x"]);
+   
+   
+   context.save();
 
+   // testcar display
+   context.translate(testcar.pos.x - camera.x, testcar.pos.y - camera.y);
+   context.rotate(testcar.degrees());
+   context.drawImage(resources["car"][testcar.rotation()].image, -24, -24); 
+   //context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
+   context.restore();
    
    // request new Frame
-   new Timer(new Duration(milliseconds: 50), request);    
+   new Timer(new Duration(milliseconds: 20), request); // TODO check millisecond value    
  }
 }
 </pre>
@@ -233,8 +265,8 @@ Game(resources) {
  canvas = query("#screen");
  context = canvas.getContext('2d');
  // extract images from resources
- images = ressources["images"];
- this.ressources = ressources;
+ images = resources["images"];
+ this.resources = resources;
  
  maus = new Maus(); // new mouse instance
  camera = new Camera(SCREENWIDTH, SCREENHEIGHT); // new camera instance
@@ -352,6 +384,18 @@ MAPHEIGHT = 12
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="MAPRENDER">
+<button class="show-code">Code</button>
+const         <strong>MAPRENDER</strong> <a class="anchor-link"
+            href="#MAPRENDER"
+            title="Permalink to Game.MAPRENDER">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+MAPRENDER = false
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="MAPWIDTH">
 <button class="show-code">Code</button>
 const         <strong>MAPWIDTH</strong> <a class="anchor-link"
@@ -388,15 +432,27 @@ pause = true
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="ressources">
+<div class="field"><h4 id="resources">
 <button class="show-code">Code</button>
-var         <strong>ressources</strong> <a class="anchor-link"
-            href="#ressources"
-            title="Permalink to Game.ressources">#</a>
+var         <strong>resources</strong> <a class="anchor-link"
+            href="#resources"
+            title="Permalink to Game.resources">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
-ressources
+resources
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="run">
+<button class="show-code">Code</button>
+var         <strong>run</strong> <a class="anchor-link"
+            href="#run"
+            title="Permalink to Game.run">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+run = 0
 </pre>
 </div>
 </div>
@@ -471,7 +527,7 @@ void <strong>begin</strong>() <a class="anchor-link" href="#begin"
 <p>game start </p>
 <pre class="source">
 void begin() {
- map = ressources["map"].data;
+ map = resources["map"].data;
  pause = false;
  request();
 }
@@ -499,41 +555,70 @@ void loop(time) {
  for (var y = 0; y &lt; MAPHEIGHT; y++) {
    for (var x = 0; x &lt; MAPWIDTH; x++) {
      if (images[x+y*16].error == false) {
-       context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+       if (x*250-camera.x &gt; -250 &amp;&amp; y*250-camera.y &gt; -250 &amp;&amp; x*250-camera.x &lt; window.innerWidth &amp;&amp; y*250-camera.y &lt; window.innerHeight) {
+         context.drawImage(images[x+y*16].image, x*250-camera.x, y*250-camera.y);
+       }
      }
    }
  }
+
+ context.fillText(delta,1,10);
+
  
  /* RENDER */
- context.shadowOffsetX = 0;
- context.shadowOffsetY = 0;
- context.strokeStyle = "yellow";
- context.lineWidth = 4;
+ if (MAPRENDER == true) {
+   context.shadowOffsetX = 0;
+   context.shadowOffsetY = 0;
+   context.strokeStyle = "yellow";
+   context.lineWidth = 4;
+ }
  
  for (var a in map["segments"])
  {
-   context.beginPath();
-   context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
-   for (var b in a["coords"])
-   {
-     //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
-     context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+   if (MAPRENDER == true) {
+     context.beginPath();
+     context.moveTo(a["coords"][0]["x"]-camera.x, a["coords"][0]["y"]-camera.y);
+     for (var b in a["coords"])
+     {
+       //context.fillText("x", b["x"]-camera.x, b["y"]-camera.y);
+       context.lineTo(b["x"]-camera.x, b["y"]-camera.y);
+     }
+     context.stroke();
+     context.fillText(a["id"], a["coords"][(a["coords"].length/2).floor()]["x"]-camera.x, a["coords"][(a["coords"].length/2).floor()]["y"]-camera.y);         
+     context.shadowBlur = 2;
    }
-   context.shadowBlur = 2;
    
-   if (testcar.segment == a["id"])
-     context.strokeStyle = "red";
-   else
-     context.strokeStyle = "yellow";
-   context.stroke();
-   context.shadowBlur = 0;
-   context.fillText(a["id"], a["coords"][(a["coords"].length/2).round()]["x"]-camera.x, a["coords"][(a["coords"].length/2).round()]["y"]-camera.y);
+   // TESTCAR TODO
+   if (testcar.segment == a["id"]) {
+     // Testcar update
+     if (testcar.update(delta/10) == 1) {
+       testcar.goal = new Point(a["coords"][testcar.point]["x"], a["coords"][testcar.point]["y"]);
+       testcar.point++;
+       if (testcar.point == a["coords"].length) {
+         if (resources["transitions"].data["transitions"].containsKey(testcar.segment))
+         {
+           var r = new Random().nextInt(resources["transitions"].data["transitions"][testcar.segment]["follow"].length);
+           testcar.segment = resources["transitions"].data["transitions"][testcar.segment]["follow"][r]["segment"];
+         }
+         testcar.point = 0;
+       }          
+     }      
+   }
+   // print(map["segments"][0]["coords"][0]["x"]);
  }
- // print(map["segments"][0]["coords"][0]["x"]);
+ 
+ 
+ context.save();
 
+ // testcar display
+ context.translate(testcar.pos.x - camera.x, testcar.pos.y - camera.y);
+ context.rotate(testcar.degrees());
+ context.drawImage(resources["car"][testcar.rotation()].image, -24, -24); 
+ //context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
+ context.restore();
  
  // request new Frame
- new Timer(new Duration(milliseconds: 50), request);    
+ new Timer(new Duration(milliseconds: 20), request); // TODO check millisecond value    
 }
 </pre>
 </div>
@@ -631,7 +716,7 @@ void resize() {
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-04-06 00:43:47.728</div>
+          <div>This page was generated at 2013-04-08 00:20:02.424</div>
         </div>
         <script async src="../client-static.js"></script>
         </body></html>

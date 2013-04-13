@@ -40,7 +40,8 @@ class Game {
   const MAPHEIGHT = 12;
   const SCREENWIDTH = 4000;
   const SCREENHEIGHT = 3000;
-  const MAPRENDER = false;
+  const MAPRENDER = true;
+  const TURN = true;
   
   /**
    * Constructor
@@ -213,11 +214,15 @@ class Game {
     context.save();
 
     // testcar display
-    context.translate(testcar.pos.x - camera.x, testcar.pos.y - camera.y);
-    context.rotate(testcar.degrees());
-    context.drawImage(resources["car"][testcar.rotation()].image, -24, -24); 
-    //context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
-    context.restore();
+    if (TURN == true) {
+      context.translate(testcar.pos.x - camera.x, testcar.pos.y - camera.y);
+      context.rotate(testcar.degrees());
+      context.drawImage(resources["car"][testcar.rotation()].image, -24, -24); 
+      //context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
+      context.restore();
+    } else {
+      context.drawImage(resources["car"][testcar.rotation()].image, testcar.pos.x - camera.x - 24, testcar.pos.y - camera.y - 24);
+    }
     
     // request new Frame
     new Timer(new Duration(milliseconds: 20), request); // TODO check millisecond value    

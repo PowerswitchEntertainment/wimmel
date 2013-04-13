@@ -30,6 +30,7 @@
 <li><a href="../wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
 <li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
 <li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="../wimmel/Object.html"><div class="icon-class"></div>Object</a></li>
 <li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
 <li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
 </ul>
@@ -45,13 +46,74 @@
 <pre class="source">
 class Car {
  var segment;
+ var point;
+ var pos = new Point(0,0);
+ var goal = new Point(0,0);
  
  /**
   * Constructor
   */
  Car() {
    segment = "A1";
+   point = 0;
  }
+ 
+ int update(delta) {
+   var d = goal - pos;
+   if (goal.squaredDistanceTo(pos) &gt; delta*delta) {
+     var n = d * (1/goal.distanceTo(pos));
+     pos += n * delta;
+     return 0;
+   } else {
+     return 1;
+   }
+ }
+ 
+ double degrees() {
+   var n = (goal - pos) * (1/goal.distanceTo(pos));
+   var d = 0;
+   if (n.y &lt; 0)
+   {
+     d = asin(n.x)+PI;
+   } else {
+     d = -asin(n.x);
+   }
+   d -= rotation()*PI/4;
+   return d;
+ }
+ 
+ int rotation() {
+   var n = (goal - pos) * (1/goal.distanceTo(pos));
+   
+   if (n.y &lt; 0) {
+     if (n.x &lt; -0.9239) {
+       return 2;
+     } else if (n.x &lt; -0.3827) {
+       return 3;
+     } else if (n.x &lt; 0.3827) {
+       return 4;
+     } else if (n.x &lt; 0.9239) {
+       return 5;
+     } else {
+       return 6;
+     }
+   } else {
+     if (n.x &lt; -0.9239) {
+       return 2;
+     } else if (n.x &lt; -0.3827) {
+       return 1;
+     } else if (n.x &lt; 0.3827) {
+       return 0;
+     } else if (n.x &lt; 0.9239) {
+       return 7;
+     } else {
+       return 6;
+     }
+   }
+
+   return 0; // TODO: do not turn at all
+ }
+ 
 }
 </pre>
 </div>
@@ -66,6 +128,7 @@ new <strong>Car</strong>() <a class="anchor-link" href="#Car"
 <pre class="source">
 Car() {
  segment = "A1";
+ point = 0;
 }
 </pre>
 </div>
@@ -73,6 +136,42 @@ Car() {
 </div>
 <div>
 <h3>Properties</h3>
+<div class="field"><h4 id="goal">
+<button class="show-code">Code</button>
+var         <strong>goal</strong> <a class="anchor-link"
+            href="#goal"
+            title="Permalink to Car.goal">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+goal = new Point(0,0)
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="point">
+<button class="show-code">Code</button>
+var         <strong>point</strong> <a class="anchor-link"
+            href="#point"
+            title="Permalink to Car.point">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+point
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="pos">
+<button class="show-code">Code</button>
+var         <strong>pos</strong> <a class="anchor-link"
+            href="#pos"
+            title="Permalink to Car.pos">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+pos = new Point(0,0)
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="segment">
 <button class="show-code">Code</button>
 var         <strong>segment</strong> <a class="anchor-link"
@@ -86,11 +185,94 @@ segment
 </div>
 </div>
 </div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="degrees">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/double.html">double</a> <strong>degrees</strong>() <a class="anchor-link" href="#degrees"
+              title="Permalink to Car.degrees">#</a></h4>
+<div class="doc">
+<pre class="source">
+double degrees() {
+ var n = (goal - pos) * (1/goal.distanceTo(pos));
+ var d = 0;
+ if (n.y &lt; 0)
+ {
+   d = asin(n.x)+PI;
+ } else {
+   d = -asin(n.x);
+ }
+ d -= rotation()*PI/4;
+ return d;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="rotation">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>rotation</strong>() <a class="anchor-link" href="#rotation"
+              title="Permalink to Car.rotation">#</a></h4>
+<div class="doc">
+<pre class="source">
+int rotation() {
+ var n = (goal - pos) * (1/goal.distanceTo(pos));
+ 
+ if (n.y &lt; 0) {
+   if (n.x &lt; -0.9239) {
+     return 2;
+   } else if (n.x &lt; -0.3827) {
+     return 3;
+   } else if (n.x &lt; 0.3827) {
+     return 4;
+   } else if (n.x &lt; 0.9239) {
+     return 5;
+   } else {
+     return 6;
+   }
+ } else {
+   if (n.x &lt; -0.9239) {
+     return 2;
+   } else if (n.x &lt; -0.3827) {
+     return 1;
+   } else if (n.x &lt; 0.3827) {
+     return 0;
+   } else if (n.x &lt; 0.9239) {
+     return 7;
+   } else {
+     return 6;
+   }
+ }
+
+ return 0; // TODO: do not turn at all
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="update">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>update</strong>(delta) <a class="anchor-link" href="#update"
+              title="Permalink to Car.update">#</a></h4>
+<div class="doc">
+<pre class="source">
+int update(delta) {
+ var d = goal - pos;
+ if (goal.squaredDistanceTo(pos) &gt; delta*delta) {
+   var n = d * (1/goal.distanceTo(pos));
+   pos += n * delta;
+   return 0;
+ } else {
+   return 1;
+ }
+}
+</pre>
+</div>
+</div>
+</div>
         </div>
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-04-06 00:43:47.702</div>
+          <div>This page was generated at 2013-04-08 00:20:02.358</div>
         </div>
         <script async src="../client-static.js"></script>
         </body></html>

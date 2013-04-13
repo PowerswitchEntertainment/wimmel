@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>Tile class / wimmel Library / Dart Documentation</title>
+        <title>Object class / wimmel Library / Dart Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="wimmel" data-type="Tile">
+        <body data-library="wimmel" data-type="Object">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Documentation</a>
-         &rsaquo; <a href="../wimmel.html">wimmel</a> &rsaquo; <a href="../wimmel/Tile.html">Tile</a>        <div id="search-box">
+         &rsaquo; <a href="../wimmel.html">wimmel</a> &rsaquo; <a href="../wimmel/Object.html">Object</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -30,13 +30,13 @@
 <li><a href="../wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
 <li><a href="../wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
 <li><a href="../wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
-<li><a href="../wimmel/Object.html"><div class="icon-class"></div>Object</a></li>
+<li><div class="icon-class"></div><strong>Object</strong></li>
 <li><a href="../wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
-<li><div class="icon-class"></div><strong>Tile</strong></li>
+<li><a href="../wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
 </ul>
 </div>
 <div class="content">
-        <h2><strong>Tile</strong>
+        <h2><strong>Object</strong>
           class
         </h2>
         
@@ -45,7 +45,7 @@
 <p>Tile of the background image
 The background image is tiled to prevent timeouts and memory overload and to save render time  </p>
 <pre class="source">
-class Tile {
+class Object {
  var image = new ImageElement();
  var manager;
  var error=true;
@@ -72,7 +72,7 @@ class Tile {
   * @param prefix  tile prefix (folder)
   * @param part    tile part (number)
   */
- Tile(manager, prefix, part) {
+ Object(manager, prefix, part) {
    this.manager = manager;
    
    image.onLoad.listen(onload);
@@ -85,17 +85,17 @@ class Tile {
 </div>
 <div>
 <h3>Constructors</h3>
-<div class="method"><h4 id="Tile">
+<div class="method"><h4 id="Object">
 <button class="show-code">Code</button>
-new <strong>Tile</strong>(manager, prefix, part) <a class="anchor-link" href="#Tile"
-              title="Permalink to Tile.Tile">#</a></h4>
+new <strong>Object</strong>(manager, prefix, part) <a class="anchor-link" href="#Object"
+              title="Permalink to Object.Object">#</a></h4>
 <div class="doc">
 <p>Constructor
 @param manager resource manager instance to be notified
 @param prefix  tile prefix (folder)
 @param part    tile part (number)</p>
 <pre class="source">
-Tile(manager, prefix, part) {
+Object(manager, prefix, part) {
  this.manager = manager;
  
  image.onLoad.listen(onload);
@@ -113,7 +113,7 @@ Tile(manager, prefix, part) {
 <button class="show-code">Code</button>
 var         <strong>error</strong> <a class="anchor-link"
             href="#error"
-            title="Permalink to Tile.error">#</a>
+            title="Permalink to Object.error">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
@@ -125,7 +125,7 @@ error=true
 <button class="show-code">Code</button>
 var         <strong>image</strong> <a class="anchor-link"
             href="#image"
-            title="Permalink to Tile.image">#</a>
+            title="Permalink to Object.image">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
@@ -137,7 +137,7 @@ image = new ImageElement()
 <button class="show-code">Code</button>
 var         <strong>manager</strong> <a class="anchor-link"
             href="#manager"
-            title="Permalink to Tile.manager">#</a>
+            title="Permalink to Object.manager">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
@@ -151,7 +151,7 @@ manager
 <div class="method"><h4 id="onerror">
 <button class="show-code">Code</button>
 void <strong>onerror</strong>(ev) <a class="anchor-link" href="#onerror"
-              title="Permalink to Tile.onerror">#</a></h4>
+              title="Permalink to Object.onerror">#</a></h4>
 <div class="doc">
 <p>Resource couldn't be loaded</p>
 <pre class="source">
@@ -165,7 +165,7 @@ void onerror(ev) {
 <div class="method"><h4 id="onload">
 <button class="show-code">Code</button>
 void <strong>onload</strong>(ev) <a class="anchor-link" href="#onload"
-              title="Permalink to Tile.onload">#</a></h4>
+              title="Permalink to Object.onload">#</a></h4>
 <div class="doc">
 <p>Resource was successfully loaded</p>
 <pre class="source">
@@ -181,7 +181,7 @@ void onload(ev) {
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-04-08 00:20:02.432</div>
+          <div>This page was generated at 2013-04-08 00:20:02.370</div>
         </div>
         <script async src="../client-static.js"></script>
         </body></html>

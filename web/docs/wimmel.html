@@ -30,6 +30,7 @@
 <li><a href="wimmel/Game.html"><div class="icon-class"></div>Game</a></li>
 <li><a href="wimmel/Json.html"><div class="icon-class"></div>Json</a></li>
 <li><a href="wimmel/Maus.html"><div class="icon-class"></div>Maus</a></li>
+<li><a href="wimmel/Object.html"><div class="icon-class"></div>Object</a></li>
 <li><a href="wimmel/ResourceManager.html"><div class="icon-class"></div>ResourceManager</a></li>
 <li><a href="wimmel/Tile.html"><div class="icon-class"></div>Tile</a></li>
 </ul>
@@ -63,25 +64,31 @@ void <strong>main</strong>() <a class="anchor-link" href="#main"
               title="Permalink to main">#</a></h4>
 <div class="doc">
 <p>Main-Function</p>
-<p>load all game ressources and prepare to launch game </p>
+<p>load all game resources and prepare to launch game </p>
 <pre class="source">
 void main() {
  var manager = new ResourceManager();
  var tiles = [];                      
- var ressources = new Map();          
+ var resources = new Map();          
  
  /* Load tiles */
  for (var a = 1; a &lt; 193; a++) {
    tiles.add(new Tile(manager, "back", into4(a))); 
  }
- ressources["images"] = tiles;
+ resources["images"] = tiles;
  
  /* Load JSON */
- ressources["map"] = new Json(manager, "map.json");
- ressources["transitions"] = new Json(manager, "transitions.json");
+ resources["map"] = new Json(manager, "map.json");
+ resources["transitions"] = new Json(manager, "transitions.json");
  
+ /* Load Objects */
+ resources["car"] = new List();
+ for (var a = 1; a &lt; 9; a++) {
+   resources["car"].add(new Object(manager, "car", into4(a)));
+ }
+   
  /* init game */
- var game = new Game(ressources);
+ var game = new Game(resources);
  
  /* start game when all resources are loaded */
  manager.registerNotifyFunction(game.begin);
@@ -124,6 +131,12 @@ void main() {
           
           <div class="type">
           <h4>
+            <a href="wimmel/Object.html"><strong>Object</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
             <a href="wimmel/ResourceManager.html"><strong>ResourceManager</strong></a>
           </h4>
           </div>
@@ -139,7 +152,7 @@ void main() {
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-04-06 00:43:47.671</div>
+          <div>This page was generated at 2013-04-08 00:20:02.347</div>
         </div>
         <script async src="client-static.js"></script>
         </body></html>
